@@ -284,7 +284,7 @@ The frontend will start on `http://localhost:5173`
 1. Create a new project named "Counter"
 2. Use AI chatbot or manually write:
 ```move
-module 0x1::counter {
+module defualt::counter {
     use std::signer;
     
     struct Counter has key {
