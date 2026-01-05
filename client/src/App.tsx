@@ -9,6 +9,7 @@ import { ModernBackground } from './components/landing/ModernBackground';
 
 function HomePage() {
   const navigate = useNavigate();
+  const initType = "github"; // or "dashboard"
 
   return (
     <div className="min-h-screen bg-gray-950 text-white relative overflow-hidden">
@@ -83,20 +84,30 @@ function HomePage() {
             <span className="text-yellow-400">No CLI required.</span>
           </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-          >
-            <button
-              onClick={() => navigate('/dashboard')}
-              className="group px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-xl text-white font-semibold text-lg hover:from-yellow-400 hover:to-orange-500 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40"
-            >
-              Initialize Project
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-          </motion.div>
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, delay: 0.4 }}
+  className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+>
+  <button
+    onClick={() => {
+      if (initType === "github") {
+        window.open(
+          "https://github.com/devbh04/MoveVM",
+          "_blank",
+          "noopener,noreferrer"
+        );
+      } else {
+        navigate("/dashboard");
+      }
+    }}
+    className="group px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-xl text-white font-semibold text-lg hover:from-yellow-400 hover:to-orange-500 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40"
+  >
+    Initialize Project
+    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+  </button>
+</motion.div>
         </div>
       </section>
 
