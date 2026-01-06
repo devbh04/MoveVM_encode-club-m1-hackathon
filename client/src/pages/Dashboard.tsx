@@ -5,6 +5,7 @@ import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { Input } from "../components/ui/input";
 import { getApiUrl } from '../lib/config';
+import EnvironmentIndicator from '../components/EnvironmentIndicator';
 import { 
   Code, 
   Plus, 
@@ -151,13 +152,17 @@ export default function DashboardPage() {
             </div>
           </div>
           
-          <Button 
-            onClick={() => setIsCreating(true)}
-            className="bg-linear-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            New Project
-          </Button>
+          <div className="flex items-center space-x-2">
+            <EnvironmentIndicator />
+            
+            <Button 
+              onClick={() => setIsCreating(true)}
+              className="bg-linear-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              New Project
+            </Button>
+          </div>
         </div>
       </header>
 
