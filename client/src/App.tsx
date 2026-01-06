@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-route
 import BuilderPage from "./pages/Builder";
 import DashboardPage from "./pages/Dashboard";
 import { motion } from "framer-motion";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight, ExternalLink, Github } from "lucide-react";
 import { PricingCard } from "./components/landing/PricingCard";
 import { Footer } from "./components/landing/Footer";
 import { ModernBackground } from "./components/landing/ModernBackground";
@@ -104,6 +104,21 @@ function HomePage() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="flex justify-center pt-4"
           >
+
+            <button
+              onClick={() => {
+                  window.open(
+                    "https://github.com/devbh04/MoveVM",
+                    "_blank",
+                    "noopener,noreferrer"
+                  );
+              }}
+              className="group px-2 py-1 bg-transparent rounded-md text-white text-sm flex items-center gap-2 cursor-pointer hover:underline"
+            >
+              <Github className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
+              View on GitHub
+            </button>
+            <div>|</div>
             <button
               onClick={() => {
                   window.open(

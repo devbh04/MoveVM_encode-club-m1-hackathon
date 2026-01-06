@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { useBuilderStore } from '../store/builderStore';
 import { useEditorStore } from '../store/editorStore';
 import { useSearchParams } from 'react-router-dom';
+import { getApiUrl } from '../lib/config';
 import {
   getAutocompleteSuggestions,
   type AutocompleteSuggestion,
@@ -312,7 +313,7 @@ export default function CodeEditor({ onCodeChange }: CodeEditorProps) {
         actualFileName = fileName.split('/').pop() || fileName;
       }
 
-      await fetch(`http://localhost:3000/projects/${projectId}/files`, {
+      await fetch(getApiUrl(`projects/${projectId}/files`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

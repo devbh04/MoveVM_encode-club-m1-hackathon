@@ -7,6 +7,7 @@ import CodeEditor from "../components/code-editor-enhanced"
 import DeploymentPanelV2 from "../components/deployment-panel-v2"
 import DeploymentHistoryPanel from "../components/deployment-history"
 import { useBuilderStore } from "../store/builderStore"
+import { getApiUrl } from "../lib/config"
 
 export default function BuilderPage() {
   const [searchParams] = useSearchParams()
@@ -30,7 +31,7 @@ export default function BuilderPage() {
   const loadProject = async (id: string) => {
     setIsLoading(true)
     try {
-      const response = await fetch(`http://localhost:3000/projects/${id}`)
+      const response = await fetch(getApiUrl(`projects/${id}`))
       const data = await response.json()
       
       if (data.success) {

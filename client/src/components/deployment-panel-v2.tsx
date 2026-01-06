@@ -13,10 +13,15 @@ import {
   Loader2,
   CheckCircle2,
   XCircle,
-  Clock
+  Clock,
+  AlertCircle
 } from 'lucide-react';
 import SimpleChatbot from './SimpleChatbot';
 import { useBuilderStore } from '../store/builderStore';
+import { getApiUrl } from '../lib/config';
+
+// Environment mode: 'local' or 'production'
+const ENVIRONMENT_MODE: 'local' | 'production' = 'production';
 
 interface DeploymentPanelV2Props {
   isChatbotOpen?: boolean;
@@ -41,6 +46,8 @@ export default function DeploymentPanelV2({
   const [currentData, setCurrentData] = useState<any>(null);
   const [latestResponse, setLatestResponse] = useState<string>('');
   const [rawResponse, setRawResponse] = useState<string>('');
+  const [showProductionOverlay, setShowProductionOverlay] = useState(false);
+  const [overlayAction, setOverlayAction] = useState('');
 
   // Load project data from MongoDB on mount
   useEffect(() => {
@@ -53,7 +60,7 @@ export default function DeploymentPanelV2({
     if (!projectId) return;
     
     try {
-      const response = await fetch(`http://localhost:3000/projects/${projectId}`);
+      const response = await fetch(getApiUrl(`projects/${projectId}`));
       const data = await response.json();
       
       if (data.success && data.project) {
@@ -138,13 +145,18 @@ export default function DeploymentPanelV2({
   };
 
   const initializeProject = async () => {
+    if (ENVIRONMENT_MODE === 'production') {
+      setOverlayAction('Initialize');
+      setShowProductionOverlay(true);
+      return;
+    }
     if (!code.trim()) return;
 
     setLoading(true);
     updateStatus('init', 'processing');
 
     try {
-      const res = await fetch('http://localhost:3000/init', {
+      const res = await fetch(getApiUrl('init'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -192,13 +204,18 @@ export default function DeploymentPanelV2({
   };
 
   const compilePackage = async () => {
+    if (ENVIRONMENT_MODE === 'production') {
+      setOverlayAction('Compile');
+      setShowProductionOverlay(true);
+      return;
+    }
     if (!code.trim()) return;
 
     setLoading(true);
     updateStatus('compile', 'processing');
 
     try {
-      const res = await fetch('http://localhost:3000/compile', {
+      const res = await fetch(getApiUrl('compile'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ moveCode: code, projectId }),
@@ -235,13 +252,18 @@ export default function DeploymentPanelV2({
   };
 
   const deployPackage = async () => {
+    if (ENVIRONMENT_MODE === 'production') {
+      setOverlayAction('Deploy');
+      setShowProductionOverlay(true);
+      return;
+    }
     if (!code.trim()) return;
 
     setLoading(true);
     updateStatus('deploy', 'processing');
 
     try {
-      const res = await fetch('http://localhost:3000/deploy', {
+      const res = await fetch(getApiUrl('deploy'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ moveCode: code, projectId }),
@@ -297,7 +319,42 @@ export default function DeploymentPanelV2({
   };
 
   return (
-    <div className="h-full flex flex-col bg-[#0a0e1a]">
+    <div className="h-full flex flex-col bg-[#0a0e1a] relative overflow-hidden">
+      {/* Production Mode Overlay */}
+      {showProductionOverlay && (
+        <div className="absolute -bottom-7 inset-0 z-50 backdrop-blur-sm flex items-end justify-center p-6 animate-in fade-in duration-300">
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-t-2xl border-2 border-amber-500/50 p-6 w-full max-w-md shadow-2xl animate-in slide-in-from-bottom duration-500">
+            <div className="flex items-start gap-3 mb-4">
+              <AlertCircle className="w-6 h-6 text-amber-500 flex-shrink-0 mt-1" />
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-2">Service Currently Unavailable</h3>
+                <p className="text-slate-300 text-sm leading-relaxed">
+                  <span className="font-medium text-amber-400">{overlayAction}</span> action cannot be performed at this time as the virtual machine is currently down for maintenance.
+                </p>
+              </div>
+            </div>
+            <div className="bg-slate-950/50 rounded p-3 mb-4">
+              <p className="text-xs text-slate-400 mb-2">Watch our demo video to see how this feature works:</p>
+              <a 
+                href="https://www.youtube.com/watch?v=hqAkiPw-mno&t=83s" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                <ExternalLink className="w-4 h-4" />
+                View Demo on YouTube
+              </a>
+            </div>
+            <Button 
+              onClick={() => setShowProductionOverlay(false)}
+              className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+            >
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
+      
       <SimpleChatbot 
         isOpen={isChatbotOpen} 
         onClose={onChatbotClose || (() => {})}

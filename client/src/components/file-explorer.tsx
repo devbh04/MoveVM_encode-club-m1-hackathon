@@ -55,7 +55,7 @@ export default function FileExplorer() {
     if (!projectId) return;
     
     try {
-      const response = await fetch(`http://localhost:3000/projects/${projectId}/files`);
+      const response = await fetch(getApiUrl(`projects/${projectId}/files`));
       const data = await response.json();
       
       if (data.success) {
@@ -74,7 +74,7 @@ export default function FileExplorer() {
     
     setIsSyncing(true);
     try {
-      const response = await fetch(`http://localhost:3000/projects/${projectId}/sync-files`);
+      const response = await fetch(getApiUrl(`projects/${projectId}/sync-files`));
       const data = await response.json();
       
       if (data.success) {
@@ -99,7 +99,7 @@ export default function FileExplorer() {
         ? fileName.split('/').slice(0, -1).join('/') 
         : 'sources';
       
-      await fetch(`http://localhost:3000/projects/${projectId}/files`, {
+      await fetch(getApiUrl(`projects/${projectId}/files`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -164,7 +164,7 @@ export default function FileExplorer() {
       if (projectId) {
         // Extract just the filename, not the full path
         const actualFileName = fileName.split('/').pop() || fileName;
-        await fetch(`http://localhost:3000/projects/${projectId}/files/${actualFileName}`, {
+        await fetch(getApiUrl(`projects/${projectId}/files/${actualFileName}`), {
           method: 'DELETE'
         }).catch(console.error);
         
@@ -186,7 +186,7 @@ export default function FileExplorer() {
       if (projectId) {
         // Extract just the filename for delete
         const actualOldFileName = oldName.split('/').pop() || oldName;
-        await fetch(`http://localhost:3000/projects/${projectId}/files/${actualOldFileName}`, {
+        await fetch(getApiUrl(`projects/${projectId}/files/${actualOldFileName}`), {
           method: 'DELETE'
         }).catch(console.error);
         

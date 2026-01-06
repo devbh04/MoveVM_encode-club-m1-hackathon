@@ -40,7 +40,7 @@ export default function DeploymentHistoryPanel() {
     if (!projectId) return;
     
     try {
-      const response = await fetch(`http://localhost:3000/projects/${projectId}`);
+      const response = await fetch(getApiUrl(`projects/${projectId}`));
       const data = await response.json();
       
       if (data.success && data.project) {

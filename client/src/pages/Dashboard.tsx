@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { Input } from "../components/ui/input";
+import { getApiUrl } from '../lib/config';
 import { 
   Code, 
   Plus, 
@@ -55,7 +56,7 @@ export default function DashboardPage() {
 
   const fetchProjects = async () => {
     try {
-      const response = await fetch('http://localhost:3000/projects');
+      const response = await fetch(getApiUrl('projects'));
       const data = await response.json();
       if (data.success) {
         setProjects(data.projects);
@@ -71,7 +72,7 @@ export default function DashboardPage() {
     if (!newProjectName.trim()) return;
 
     try {
-      const response = await fetch('http://localhost:3000/projects', {
+      const response = await fetch(getApiUrl('projects'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -95,7 +96,7 @@ export default function DashboardPage() {
     if (!confirm('Are you sure you want to delete this project?')) return;
 
     try {
-      const response = await fetch(`http://localhost:3000/projects/${id}`, {
+      const response = await fetch(getApiUrl(`projects/${id}`), {
         method: 'DELETE'
       });
       

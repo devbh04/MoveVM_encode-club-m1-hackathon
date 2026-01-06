@@ -3,6 +3,7 @@ import { Copy } from 'lucide-react';
 import { Button } from './ui/button';
 import { useBuilderStore } from '../store/builderStore';
 import { useSearchParams } from 'react-router-dom';
+import { getApiUrl } from '../lib/config';
 
 interface CodeEditorProps {
   onCodeChange?: (code: string) => void;
@@ -98,7 +99,7 @@ export default function CodeEditor({ onCodeChange }: CodeEditorProps) {
         actualFileName = fileName.split('/').pop() || fileName;
       }
       
-      await fetch(`http://localhost:3000/projects/${projectId}/files`, {
+      await fetch(getApiUrl(`projects/${projectId}/files`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
